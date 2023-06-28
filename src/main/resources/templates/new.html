@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый пользователь</title>
+</head>
+<body>
+    <form th:method="POST" th:action="@{/admin}" th:object="${user}">
+        <div>
+            <label th:for="name">Введите имя:</label>
+            <input type="text" th:field="*{name}" id="name">
+            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+
+            <br/>
+
+            <label th:for="lastName">Введите фамилию:</label>
+            <input type="text" th:field="*{lastName}" id="lastname">
+            <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Lastname Error</div>
+
+            <br/>
+
+            <label th:for="age">Введите возраст:</label>
+            <input type="text" th:field="*{age}" id="age">
+            <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+
+            <br/>
+
+            <label th:for="email">Введите Email/Login:</label>
+            <input type="text" th:field="*{email}" id="email">
+            <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+
+            <br/>
+
+            <label th:for="password">Введите пароль:</label>
+            <input type="text" th:field="*{password}" id="password">
+            <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+
+            <br/>
+
+            <label>Введите роли:
+                <select id="role-select" required class="form-control" th:field="*{roles}" multiple="multiple">
+                    <option th:each="role : ${rolesToAdd}"
+                            th:field="*{roles}"
+                            th:value="${role.getId()}"
+                            th:text="${role.getName()}">Role name
+                    </option>
+                </select>
+            </label>
+
+            <br/>
+
+            <input type="submit" value="Добавить">
+        </div>
+    </form>
+
+    <form th:method="POST" th:action="@{/logout}">
+        <input type="submit" value="LOGOUT">
+    </form>
+</body>
+</html>
