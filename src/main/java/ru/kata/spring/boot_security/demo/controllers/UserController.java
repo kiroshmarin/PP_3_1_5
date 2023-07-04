@@ -1,12 +1,18 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.kata.spring.boot_security.demo.models.Role;
+import ru.kata.spring.boot_security.demo.security.AppUserDetails;
 import ru.kata.spring.boot_security.demo.servicies.UserService;
 
 import java.security.Principal;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -19,9 +25,16 @@ public class UserController {
     }
 
     @GetMapping
-    public String show(Principal principal, Model model) {
-        model.addAttribute("user", userService.findByEmail(principal.getName()));
-        return "show";
+    public String show(Authentication authentication, Model model) {
+        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
+        model.addAttribute("user", userDetails.getUser());
+        model.addAttribute("roles", userDetails
+                .getUser()
+                .getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet()));
+        return "user-info";
     }
 
 }

@@ -7,10 +7,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.servicies.RoleService;
+import ru.kata.spring.boot_security.demo.servicies.AppUserDetailsService;
 import ru.kata.spring.boot_security.demo.servicies.UserService;
 import ru.kata.spring.boot_security.demo.utils.UserValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -19,17 +21,21 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
     private final UserValidator userValidator;
+    private final AppUserDetailsService appUserDetailsService;
 
-    public AdminController(UserService userService, RoleService roleService, UserValidator userValidator) {
+    public AdminController(UserService userService, RoleService roleService, UserValidator userValidator, AppUserDetailsService appUserDetailsService) {
         this.userService = userService;
         this.roleService = roleService;
         this.userValidator = userValidator;
+        this.appUserDetailsService = appUserDetailsService;
     }
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Principal principal, Model model) {
+        model.addAttribute("authUser", appUserDetailsService.findByEmail(principal.getName()));
         model.addAttribute("users", userService.index());
-        return "index";
+        model.addAttribute("rolesToAdd", roleService.getRoles());
+        return "admin-panel";
     }
 
     @GetMapping("/new")
@@ -49,18 +55,18 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("rolesToAdd", roleService.getRoles());
-        model.addAttribute("user", userService.show(id));
-        return "edit";
-    }
+//    @GetMapping("/{id}/edit")
+//    public String edit(@PathVariable("id") Long id, Model model) {
+//        model.addAttribute("rolesToAdd", roleService.getRoles());
+//        model.addAttribute("user", userService.show(id));
+//        return "edit";
+//    }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("rolesToAdd", roleService.getRoles());
-            return "edit";
+            return "admin-panel";
         }
         userService.update(user);
         return "redirect:/admin";

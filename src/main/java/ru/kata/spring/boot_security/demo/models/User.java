@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User implements UserDetails {
+public class User  {
 
     @Id
     @Column(name = "id")
@@ -24,7 +24,7 @@ public class User implements UserDetails {
     private String name;
 
     @NotEmpty(message = "Поле не должно быть пустым")
-    @Size(min = 2, max = 40, message = "Имя должно быть от 2 до 40 символов длиной")
+    @Size(min = 2, max = 40, message = "Фамилия должна быть от 2 до 40 символов длиной")
     @Column(name = "last_name")
     private String lastName;
 
@@ -81,6 +81,10 @@ public class User implements UserDetails {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -120,41 +124,9 @@ public class User implements UserDetails {
         return this;
     }
 
-    // Security settings
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
     @Override
     public String toString() {
