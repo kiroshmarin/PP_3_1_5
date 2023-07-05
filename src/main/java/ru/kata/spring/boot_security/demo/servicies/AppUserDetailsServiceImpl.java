@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
-import ru.kata.spring.boot_security.demo.security.AppUserDetails;
 
 @Service
 public class AppUserDetailsServiceImpl implements AppUserDetailsService {
@@ -28,8 +27,8 @@ public class AppUserDetailsServiceImpl implements AppUserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) {
-        AppUserDetails userDetails = new AppUserDetails(findByEmail(email));
-        Hibernate.initialize(userDetails.getAuthorities());
-        return userDetails;
+        User user = findByEmail(email);
+        Hibernate.initialize(user.getAuthorities());
+        return user;
     }
 }

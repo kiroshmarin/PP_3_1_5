@@ -150,8 +150,8 @@
                                                                     <br>
 
                                                                     <label><b>Роли</b>
-                                                                        <select id="role-select" required class="form-control" multiple="multiple">
-                                                                            <option th:each="role : ${rolesToAdd}"
+                                                                        <select id="role-select" required class="form-control" multiple="multiple" th:size="${user.roles.size}">
+                                                                            <option th:each="role : ${user.roles}"
                                                                                     th:value="${role.getId()}"
                                                                                     th:text="${role.getSimpleName()}">
                                                                             </option>
@@ -214,7 +214,7 @@
                                                                 <br>
 
                                                                 <label><b>Роли</b>
-                                                                    <select id="d_role-select" required class="form-control" multiple="multiple" disabled>
+                                                                    <select id="d_role-select" required class="form-control" multiple="multiple" th:size="${user.roles.size}" disabled>
                                                                         <option th:each="role : ${rolesToAdd}"
                                                                                 th:value="${role.getId()}"
                                                                                 th:text="${role.getSimpleName()}">
