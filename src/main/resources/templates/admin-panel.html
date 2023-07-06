@@ -83,7 +83,6 @@
                                                         style="display: inline-block"
                                                         type="button" class="btn btn-info"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#editModal"
                                                         th:data-bs-target="${'#editModal' + user.getId()}">
 
                                                         Изменить
@@ -92,9 +91,9 @@
                                             </td>
                                             <td>
                                                 <button
-                                                        type="button" class="btn btn btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#DELETE"
-                                                        th:data-bs-target="${'#DELETE'+user.getId()}">
+                                                        type="button" class="btn btn btn-danger"
+                                                        data-bs-toggle="modal"
+                                                        th:data-bs-target="${'#deleteModal'+ user.getId()}">
 
                                                         Удалить
                                                 </button>
@@ -172,7 +171,7 @@
 
 <!--                                        Delete Modal-->
 
-                                            <div class="modal fade" id="deleteModal" th:id="${'DELETE'+user.getId()}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="deleteModal" th:id="${'deleteModal'+ user.getId()}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
