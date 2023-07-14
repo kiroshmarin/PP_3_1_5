@@ -86,7 +86,6 @@
                                     <label><b>Выберите роли:</b>
                                         <select id="role-select" required class="form-control" th:field="*{roles}" multiple="multiple">
                                             <option th:each="role : ${rolesToAdd}"
-                                                    th:field="*{roles}"
                                                     th:value="${role.getId()}"
                                                     th:text="${role.getSimpleName()}">Role name
                                             </option>
