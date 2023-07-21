@@ -113,43 +113,43 @@
                                                                     <br>
 
                                                                     <label th:for="id"><b>ID</b></label>
-                                                                    <input th:name="id" th:value="${user.id}" th:type="text" class="form-control" id="id" disabled/>
+                                                                    <input th:name="id" th:value="${user.id}" th:type="text" class="form-control" disabled>
 
                                                                     <br>
 
                                                                     <label th:for="name"><b>Имя</b></label>
-                                                                    <input th:name="name" th:value="${user.name}" th:type="text" class="form-control" id="name">
+                                                                    <input th:name="name" th:value="${user.name}" th:type="text" class="form-control">
 <!--                                                                        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>-->
 
                                                                     <br/>
 
                                                                     <label th:for="lastName"><b>Фамилия</b></label>
-                                                                    <input th:name="lastName" th:value="${user.lastName}" th:type="text" class="form-control" id="lastname">
+                                                                    <input th:name="lastName" th:value="${user.lastName}" th:type="text" class="form-control">
 <!--                                                                        <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="${user.lastName}">Lastname Error</div>-->
 
                                                                     <br/>
 
                                                                     <label th:for="age"><b>Возраст</b></label>
-                                                                    <input th:name="age" th:value="${user.age}" th:type="number" class="form-control" id="age">
+                                                                    <input th:name="age" th:value="${user.age}" th:type="number" class="form-control">
 <!--                                                                        <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="${user.age}">Age Error</div>-->
 
                                                                     <br/>
 
                                                                     <label th:for="email"><b>Email/Login</b></label>
-                                                                    <input th:name="email" th:value="${user.email}" th:type="text" class="form-control" id="email">
+                                                                    <input th:name="email" th:value="${user.email}" th:type="text" class="form-control">
 <!--                                                                        <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="${user.email}">Email Error</div>-->
 
                                                                     <br/>
 
                                                                     <label th:for="password"><b>Пароль</b></label>
                                                                     <div class="password">
-                                                                        <input th:name="password" th:value="${user.password}" th:type="password" class ="form-control" id="password">
+                                                                        <input th:name="password" th:value="${user.password}" th:type="password" class="form-control" hidden>
 <!--                                                                            <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="${user.password}">Password Error</div>-->
                                                                     </div>
                                                                     <br>
 
                                                                     <label><b>Роли</b>
-                                                                        <select th:name="roles" id="role-select" required class="form-control" multiple="multiple" th:size="${rolesToAdd.size}">
+                                                                        <select th:name="roles" required multiple="multiple" th:size="${rolesToAdd.size}" class="form-control">
                                                                             <option th:each="role : ${rolesToAdd}"
                                                                                     th:value="${role.getId()}"
                                                                                     th:text="${role.getSimpleName()}"

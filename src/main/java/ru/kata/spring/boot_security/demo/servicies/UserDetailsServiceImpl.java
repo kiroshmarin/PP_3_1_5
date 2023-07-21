@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) {
         User user = findByEmail(email);
         Hibernate.initialize(user.getAuthorities());
