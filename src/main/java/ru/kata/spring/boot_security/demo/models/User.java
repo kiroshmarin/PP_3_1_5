@@ -1,8 +1,10 @@
 package ru.kata.spring.boot_security.demo.models;
 
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.utils.UserValidator;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -18,23 +20,24 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Поле не должно быть пустым")
+    @NotEmpty(message = "Поле \"Имя\" не должно быть пустым")
     @Size(min = 2, max = 30, message = "Имя должно быть от 2 до 30 символов длиной")
     @Column(name = "name")
     private String name;
 
-    @NotEmpty(message = "Поле не должно быть пустым")
+    @NotEmpty(message = "Поле \"Фамилия\"  не должно быть пустым")
     @Size(min = 2, max = 40, message = "Фамилия должна быть от 2 до 40 символов длиной")
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull(message = "Поле \"Возраст\"  не должно быть пустым")
     @Min(value = 1, message = "Минимальный возраст не может быть меньше 1 года!")
     @Max(value = 120, message = "Максимальный возраст не может быть больше 120 лет!")
     @Column(name = "age")
     private Byte age;
 
-    @NotEmpty(message = "Поле не должно быть пустым")
-    @Email(message = "Неверно заполненное поле")
+    @NotEmpty(message = "Поле \"Email/Login\" не должно быть пустым")
+    @Email(message = "Неверно заполнено поле \"Email/Login\"")
     @Column(name = "email", unique = true)
     private String email;
 
@@ -42,6 +45,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @NotEmpty(message = "Выберите хотя бы одну роль")
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+
+    <link rel="shortcut icon" href="https://images.pngnice.com/download/2114/Spring-Transparent-PNG.png"
+          type="image/png"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <p class="navbar-brand text-white">
+            <b><span class="align-middle" th:utext="${authUser.getEmail()}"></span></b>
+            <span class="align-middle">with roles:</span>
+            <span class="align-middle" th:each="role : ${authUser.getRoles()}" th:text="${role.getSimpleName()} + ' '"></span>
+        </p>
+        <form th:action="@{/logout}" th:method="POST">
+            <button type="submit" class="btn btn-dark text-secondary">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+<!------Left panel------>
+        <div class="col-2 p-0">
+                <div class="nav flex-column nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" href="/admin" sec:authorize="hasRole('ADMIN')" role="tab"
+                       aria-controls="v-pills-home" aria-selected="true">Admin</a>
+                    <a class="nav-link" href="/user" sec:authorize="(hasAnyRole('ADMIN', 'USER'))" role="tab"
+                       aria-controls="v-pills-profile" aria-selected="false">User</a>
+                </div>
+            </div>
+<!------Right panel------>
+        <div class="col-10">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-admin" role="tabpanel" aria-labelledby="v-pills-admin-tab">
+                    <h2>Admin panel</h2>
+<!------Navigation tabs control------>
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-users_table-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-users_table" type="button" role="tab"
+                                    aria-controls="nav-users_table" aria-selected="true">Users table
+                            </button>
+                            <button class="nav-link" id="nav-new_user-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-new_user" type="button" role="tab" aria-controls="nav-new_user"
+                                    aria-selected="false">New User
+                            </button>
+                        </div>
+                    </nav>
+<!------Navigation tabs content------>
+                    <div class="tab-content" id="nav-tabContent">
+<!------Main admin page with users table------>
+                        <div class="tab-pane fade show active" id="nav-users_table" role="tabpanel" aria-labelledby="nav-users_table-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div class="m-1">
+                                                    <h4>All users</h4>
+                                                </div>
+                                            </div>
+                                                <div class="card-body">
+                                                    <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Фамилия</th>
+                                                        <th>Имя</th>
+                                                        <th>Возраст</th>
+                                                        <th>Email/Login</th>
+                                                        <th>Права доступа</th>
+                                                        <th>Изменить</th>
+                                                        <th>Удалить</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="tbody">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+<!------Tab of creating new user------>
+                        <div class="tab-pane fade" id="nav-new_user" role="tabpanel" aria-labelledby="nav-new_user-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="m-1">
+                                        <h4><b>Add new user</b></h4>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center container">
+                                    <div class="row">
+                                        <form id="formForNewUser">
+
+                                            <label for="name" class="col-form-label"><b>Введите имя:</b></label>
+                                            <input id="name" type="text" class="form-control" name="name">
+                                            <label for="lastName" class="col-form-label"><b>Введите фамилию:</b></label>
+                                            <input id="lastName" type="text" class="form-control" name="lastName">
+                                            <label for="age" class="col-form-label"><b>Введите возраст:</b></label>
+                                            <input id="age" type="number" class="form-control" name="age">
+                                            <label for="email" class="col-form-label"><b>Введите Email/Login:</b></label>
+                                            <input id="email" type="text" class="form-control" name="email">
+                                            <label for="password" class="col-form-label"><b>Введите пароль:</b></label>
+                                            <div class="password">
+                                                <input id="password" type="password" class="form-control" name="password">
+                                            </div>
+                                            <div>
+                                                <label for="roles"><b>Выберите роли:</b></label>
+                                                <select multiple class="form-control" size="2"  id="roles" name="roles">
+                                                    <option value=1>ADMIN</option>
+                                                    <option value=2>USER</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <button type="submit" class="btn btn-success" form="formForNewUser" onclick="newUser()">Добавить пользователя</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!------Edit modal------>
+                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Изменить пользователя</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                            </div>
+                            <form class="modal-body col-md text-center" id="formForEditing">
+                                <div class="modal-body">
+                                    <label for="id_ed" class="col-form-label"><b>ID</b></label>
+                                    <input id="id_ed" type="text" name="oldUserId" class="form-control" disabled>
+                                    <label for="name_ed" class="col-form-label"><b>Имя</b></label>
+                                    <input id="name_ed" type="text" class="form-control" name="name">
+                                    <label for="lastName_ed" class="col-form-label"><b>Фамилия</b></label>
+                                    <input id="lastName_ed" type="text" class="form-control" name="lastName">
+                                    <label for="age_ed" class="col-form-label"><b>Возраст</b></label>
+                                    <input id="age_ed" type="number" class="form-control" name="age">
+                                    <label for="email_ed" class="col-form-label"><b>Email/Login</b></label>
+                                    <input id="email_ed" type="text" class="form-control" name="email">
+                                    <label for="password_ed" class="col-form-label"><b>Пароль</b></label>
+                                    <div class="password">
+                                        <input id="password_ed" type="password" class="form-control" name="password">
+                                    </div>
+                                    <div>
+                                        <label for="rolesForEditing"><b>Роли</b></label>
+                                        <select multiple class="form-control" size="2"  id="rolesForEditing" name="roles">
+                                            <option value=1>ADMIN</option>
+                                            <option value=2>USER</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="editCloseBtn">Закрыть</button>
+                                <button type="button" class="btn btn-primary" id="editBtn" onclick="editUser(); getAdminPage()">Изменить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!------Delete modal------>
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Удалить пользователя</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                            </div>
+                            <form class="modal-body col-md text-center" id="formForDeleting">
+                                <div class="modal-body">
+                                    <label for="id_del" class="col-form-label"><b>ID</b></label>
+                                    <input id="id_del" type="text" name="oldUserId" class="form-control" disabled>
+                                    <label for="name_del" class="col-form-label"><b>Имя</b></label>
+                                    <input id="name_del" type="text" class="form-control" name="name" disabled>
+                                    <label for="lastName_del" class="col-form-label"><b>Фамилия</b></label>
+                                    <input id="lastName_del" type="text" class="form-control" name="lastName" disabled>
+                                    <label for="age_del" class="col-form-label"><b>Возраст</b></label>
+                                    <input id="age_del" type="number" class="form-control" name="age" disabled>
+                                    <label for="email_del" class="col-form-label"><b>Email/Login</b></label>
+                                    <input id="email_del" type="text" class="form-control" name="email" disabled>
+                                    <label for="password_del" class="col-form-label"><b>Пароль</b></label>
+                                    <div class="password">
+                                        <input id="password_del" type="password" class="form-control" name="password" disabled>
+                                    </div>
+
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="deleteCloseBtn">Закрыть</button>
+                                <button type="button" class="btn btn-primary" id="deleteBtn" onclick="deleteUser(); getAdminPage()">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script
+        src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+        crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+        crossorigin="anonymous"></script>
+
+<script src="/script.js"></script>
+</body>
+</html>

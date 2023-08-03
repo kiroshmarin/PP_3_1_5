@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
+import ru.kata.spring.boot_security.demo.utils.UserNotFoundException;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> index() {
+    public List<User> getUsers() {
         return usersRepository.findAll();
     }
 
@@ -49,12 +50,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(Long id) {
+        usersRepository.findById(id).orElseThrow(UserNotFoundException::new);
         usersRepository.deleteById(id);
     }
 
     @Override
     public User show(Long id) {
-        return usersRepository.findById(id).orElse(null);
+        return usersRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
 
