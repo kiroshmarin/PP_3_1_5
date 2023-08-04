@@ -27,13 +27,13 @@ public class RESTController {
     }
 
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public User showUser(@PathVariable("id") Long id) {
-        return userService.show(id);
+    public ResponseEntity<User> showUser(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(userService.show(id), HttpStatus.OK);
     }
 
     @PostMapping("/users")
